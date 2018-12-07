@@ -32,6 +32,8 @@ public class InputParser {
 
       List<Shift> shifts = extractShifts(shiftEvents);
 
+
+
       return shifts;
    }
 

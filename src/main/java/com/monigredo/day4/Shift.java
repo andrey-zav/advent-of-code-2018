@@ -2,8 +2,12 @@ package com.monigredo.day4;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Andrew Z
@@ -32,11 +36,30 @@ public class Shift {
       sleepEvents.add(event);
    }
 
-   public void getTotalSleepTime(){
-      throw new UnsupportedOperationException();
+   public long getTotalSleepMinutes() {
+      int i = 0;
+      long totalSleepMillis = 0;
+      while (i + 1 < sleepEvents.size()) {
+         ShiftEvent sleepEvent = sleepEvents.get(0);
+         ShiftEvent wakeEvent = sleepEvents.get(i + 1);
+
+         long sleepMillis = wakeEvent.getTime().toEpochSecond(ZoneOffset.UTC) - sleepEvent.getTime().toEpochSecond(ZoneOffset.UTC);
+         totalSleepMillis += sleepMillis;
+
+         i += 2;
+      }
+
+      return totalSleepMillis / (1000 * 60);
    }
 
-   public void getTopSleepHour(){
-      throw new UnsupportedOperationException();
+   public void getTopSleepMinute() {
+      Map<LocalDateTime, Integer> fq = new HashMap<>();
+      int i = 0;
+      while (i + 1 < sleepEvents.size()) {
+         ShiftEvent sleepEvent = sleepEvents.get(0);
+         ShiftEvent wakeEvent = sleepEvents.get(i + 1);
+
+
+      }
    }
 }
