@@ -14,4 +14,5 @@ import java.time.temporal.TemporalAccessor;
 public class ShiftEvent {
    public LocalDateTime time;
    public EventType type;
+   public String rawData;
 }
