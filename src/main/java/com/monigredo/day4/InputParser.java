@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -32,9 +33,30 @@ public class InputParser {
 
       List<Shift> shifts = extractShifts(shiftEvents);
 
+      List<GuardShifts> guardShifts = toGuardShifts(shifts);
 
+      GuardShifts topSleepingGuard = guardShifts.stream()
+          .max(Comparator.comparing(GuardShifts::getTotalSleepDurationInMinutes)).orElseThrow(
+          RuntimeException::new);
+
+      Long guardId = topSleepingGuard.getGuardId();
+      Long topSleepMinute = topSleepingGuard.getTopSleepMinute();
+      System.out.println(guardId);
+      System.out.println(topSleepMinute);
+      System.out.println(guardId * topSleepMinute);
 
       return shifts;
+   }
+
+   private List<GuardShifts> toGuardShifts(List<Shift> shifts) {
+      Map<Long, List<Shift>> guardShiftsMap = shifts
+          .stream()
+          .collect(Collectors.groupingBy(Shift::getGuardId));
+
+      List<GuardShifts> guardShifts = new ArrayList<>();
+      guardShiftsMap.forEach((k,v) -> guardShifts.add(new GuardShifts(k, v)));
+
+      return guardShifts;
    }
 
    private List<Shift> extractShifts(List<ShiftEvent> shiftEvents) {
